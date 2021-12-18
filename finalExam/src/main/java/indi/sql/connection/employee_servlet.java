@@ -5,7 +5,9 @@ import java.sql.ResultSet;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import jakarta.servlet.*;
@@ -16,7 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class employee_servlet
  */
-@WebServlet(urlPatterns="/insert.do")
+@WebServlet(urlPatterns="/server.do")
 public class employee_servlet extends jakarta.servlet.http.HttpServlet {
 	private static final long serialVersionUID = 1L;
 	DateFormat fmt=new SimpleDateFormat("yyyy-MM-dd");
@@ -39,31 +41,45 @@ public class employee_servlet extends jakarta.servlet.http.HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 
-		String name=request.getParameter("name");
-		String birthday=request.getParameter("birthday");
-		String dept=request.getParameter("dept");
-
-
+		request.setCharacterEncoding("utf-8");
+		String name=request.getParameter("name");  //获取输入姓名
+		String birthday=request.getParameter("birthday");  //获取输入的出生日期
+		String dept=request.getParameter("dept");  //获取选择的部门
+		
 		try {
-			date =fmt.parse(birthday);
-			jsd=new java.sql.Date(date.getTime());
+			date =fmt.parse(birthday);		
+			jsd=new java.sql.Date(date.getTime());	//类型转换 String->date
+			request.setAttribute("name",name);
+			request.setAttribute("birthday",birthday);
+			request.setAttribute("dept",dept);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(request.getParameter("name")=="1") {
-			r_dept();
-		}
-
-		emp=new Employee(dept_int,name,jsd);
-		IOUS insert=new IOUS();
-		insert.in_emp();
 		
+		switch(dept) {
+			case "信息工程学院":
+				dept_int=1;
+				break;
+			case "外国语学院":
+				dept_int=2;
+				break;
+			case "体育学院":
+				dept_int=3;
+				break;
+			case "音乐学院":
+				dept_int=4;
+				break;
+		}
+		
+		emp=new Employee(dept_int,name,jsd);  //把输入在前端的用户信息放在一个员工对象中
+		IOUS insert=new IOUS();		//实例化一个插入对象
+		insert.in_emp(emp);			//调用插入方法
+		request.getRequestDispatcher("myemp.jsp").forward(request, response);
+//		response.sendRedirect("myemp.jsp");
 	}
 
-	public List<Dept> r_dept() {
-		return ious.select_dept();
-	}
+	
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

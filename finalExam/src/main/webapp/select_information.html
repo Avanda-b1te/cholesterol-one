@@ -14,7 +14,6 @@
 	margin:300px auto;
 	padding: 5px;
 	width:400px;
-	height:230px;
 	text-align:center;
 	border-radius: 5px;
 	box-shadow: 10px 10px 5px #888888;
@@ -73,6 +72,36 @@
 		margin: ;
 	}*/
 </style>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script>
+$(document).ready(function(){
+	$.ajax({
+		url:"dselect.do",
+		type:"GET",
+		success:function(arr){
+			var arra = eval('('+arr+')');   //字符串转字符串对象
+			for(var j=0;j<arra.length;j++){
+				var har = eval('('+arra[i]+')');
+			}
+			var ahtml = "";
+			console.log(arra);
+			for(var i = 0 ; i < arra.length;i++){				
+				var temp='<div class="box2"><div class="box3">';
+				temp+=i+1;
+				temp+='</div><div class="box3">';
+				temp+=arra[i][0];
+				temp+='</div><div class="box5">';
+				temp+=arra[i][1];
+				temp+='</div><div class="box5">';
+				temp+=arra[i][2];
+				temp+='</div></div>';
+				ahtml+=temp;
+			}
+			$(".frame").append(ahtml);
+		}
+	})
+});
+</script>
 </head>
 <body>
 <form action="" method="post">
@@ -88,12 +117,15 @@
 		<div class="box1">信息查询</div>
 		<div class="box2">
 			<div class="box3">部门</div>
-			<div class="box4"><select>
+			<div class="box4">
+				<select>
 				<option>信息工程学院</option>
 				<option>外国语学院</option>
 				<option>体育学院</option>
 				<option>音乐学院</option>
-			</select></div></div>
+				</select>
+			</div>
+		</div>
 		<div class="box2">
 			<div class="box3">编号</div>
 			<div class="box3">部门</div>
@@ -101,7 +133,6 @@
 			<div class="box5">出生日期</div>
 		</div>
 	</div>
-
 </form>
 </body>
 </html>

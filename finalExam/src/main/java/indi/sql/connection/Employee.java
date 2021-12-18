@@ -14,7 +14,9 @@ public Employee(int dept_id,String name,Date date) {
 	this.name=name;
 	this.date=date;
 }
-
+public Employee() {
+	
+}
 //public void set_id(int id) {
 //	this.id=id;
 //}

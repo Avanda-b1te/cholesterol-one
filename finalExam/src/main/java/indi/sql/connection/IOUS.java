@@ -9,10 +9,10 @@ public class IOUS implements InOutSelectUpdate{
 	private PreparedStatement ps=null;
 	private DBConnection db=new DBConnection();
 	private ResultSet rs=null;
-	private Employee e=null;
+//	private Employee e=null;
 	
 	@Override
-	public void in_emp() {
+	public void in_emp(Employee e) {
 		// TODO Auto-generated method stub
 		int id=e.get_dept_id();
 		String name=e.get_name();
@@ -36,16 +36,26 @@ public class IOUS implements InOutSelectUpdate{
 	}
 
 	@Override
-	public ResultSet select_emp() {
+	public List<Employee> select_emp() {
 		// TODO Auto-generated method stub
+		List<Employee> emp=new ArrayList<>();
 		try {
 			rs=db.DB("select * from employee").executeQuery();
-			db.close();
+			while(rs.next()) {
+				int id=rs.getInt(2);
+				String name=rs.getString(3);
+				Date date=rs.getDate(4);
+				Employee e=new Employee();
+				e.set_dept_id(id);
+				e.set_name(name);
+				e.set_date(date);
+				emp.add(e);
+			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return rs;
+		db.close();
+		return emp;
 	}
 
 	@Override
@@ -54,7 +64,7 @@ public class IOUS implements InOutSelectUpdate{
 		List<Dept> list_dept=new ArrayList<>();
 		
 		try {
-			rs=db.DB("select * form dept").executeQuery();
+			rs=db.DB("select * from dept").executeQuery();
 			while(rs.next()) {
 				int id=rs.getInt(1);
 				String name=rs.getString(2);
